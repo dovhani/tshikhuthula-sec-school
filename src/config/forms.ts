@@ -9,7 +9,7 @@
  * [ACTION REQUIRED] Replace the placeholder below with the real key.
  * Until then, the forms will show a delivery error on submit.
  */
-export const WEB3FORMS_ACCESS_KEY = 'REPLACE_WITH_WEB3FORMS_ACCESS_KEY';
+export const WEB3FORMS_ACCESS_KEY = '3bb39263-2490-491b-89f8-213fa513edae';
 
 /** Web3Forms submission endpoint. */
 export const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
