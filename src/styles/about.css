@@ -279,21 +279,28 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+  background: #ffffff !important;
 }
 
 @media (max-width: 1024px) {
 
-  .ab-grid,
+  .ab-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .ab-facility-grid {
     grid-template-columns: repeat(2, 1fr);
+    background: #ffffff !important;
   }
 }
 
 @media (max-width: 640px) {
 
-  .ab-grid,
+  .ab-grid {
+    grid-template-columns: 1fr;
+  }
   .ab-facility-grid {
     grid-template-columns: 1fr;
+    background: #ffffff !important;
   }
 }
 
