@@ -12,5 +12,11 @@
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
     "tailwindcss": "^4.1.18"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "Safari >= 12",
+    "iOS >= 12"
+  ]
 }

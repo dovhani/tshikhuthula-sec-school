@@ -2,9 +2,15 @@
 const { currentPage = 'home' } = Astro.props;
 
 const menuItems = [
-    { 
-        key: 'home', 
-        title: 'Home', 
+    {
+        key: 'enrol',
+        title: 'Enrol Now',
+        href: '/enrolment',
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>'
+    },
+    {
+        key: 'home',
+        title: 'Home',
         href: '/',
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>'
     },
@@ -27,21 +33,15 @@ const menuItems = [
     },
     { 
         key: 'calendar-events', 
-        title: 'Calendar & Events', 
+        title: 'Calendar',
         href: '/calendar',
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>'
     },
-    { 
-        key: 'contact', 
-        title: 'Contact Us', 
+    {
+        key: 'contact',
+        title: 'Contact Us',
         href: '/contact',
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>'
-    },
-    { 
-        key: 'enrol', 
-        title: 'Enrol Now', 
-        href: '/enrolment',
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>'
     }
 ];
 
@@ -53,69 +53,49 @@ const contactInfo = {
 
 <header 
   id="main-header" 
-  class={`fixed ${currentPage === 'home' ? 'top-[5%]' : 'top-0'} left-0 w-full z-[9999] font-lato transition-all duration-300 ${currentPage !== 'home' ? 'nav-sub-page nav-scrolled' : ''}`}
+  class={`fixed top-0 left-0 w-full z-[9999] font-lato transition-all duration-300 ${currentPage !== 'home' ? 'nav-sub-page nav-scrolled' : ''}`}
   data-page-type={currentPage === 'home' ? 'home' : 'sub'}
 >
 
   <!-- Main Navigation Area -->
-  <div id="nav-outer" class="relative w-full flex justify-center z-[80] px-4 sm:px-6 transition-all duration-300">
-      <div id="nav-inner" class={`w-full ${currentPage === 'home' ? 'max-w-[80vw]' : 'max-w-full'} relative transition-all duration-300`}>
-          <div id="nav-pill" class={`${currentPage === 'home' ? 'bg-white/5 backdrop-blur-[32px] rounded-xl shadow-[0_16px_48px_0_rgba(0,0,0,0.18),0_4px_16px_0_rgba(0,0,0,0.10)]' : 'bg-white/10 backdrop-blur-md shadow-lg'} flex items-center justify-start h-[120px] relative z-50 overflow-visible transition-all duration-300`}>
+  <div id="nav-outer" class="relative w-full flex justify-center z-[80] transition-all duration-300 border-b border-white/10 bg-transparent">
+      <div id="nav-inner" class="w-full relative transition-all duration-300 max-w-7xl mx-auto">
+          <div id="nav-pill" class="flex items-center justify-between h-[90px] relative z-50 overflow-visible transition-all duration-300 px-6 lg:px-8 w-full">
         
         <!-- Mobile Menu Toggle (Left) -->
         <button
           id="mobile-menu-toggle"
-          class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-50/50 transition-colors ml-6"
+          class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
           aria-label="Open Menu"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
 
-        <!-- Logo Section: centered vertically, left aligned -->
-        <div class="hidden md:block absolute top-1/2 left-[3%] -translate-y-1/2 h-[100px]">
-          <a href="/" class="flex items-center gap-4 transition-transform active:scale-95 h-full">
-            <div class="relative h-[100px] w-[100px] flex items-center justify-center p-2">
-              <img src="/assets/images/logo5.png" alt="School Logo" class="h-full w-auto object-contain" />
-            </div>
-            <div class="hidden xl:flex flex-col">
-              <span class="logo-name text-2xl font-black tracking-tight text-maroon-900 transition-colors duration-300 font-lato">Tshikhuthula</span>
-              <span class="logo-tagline text-[10px] font-semibold tracking-widest text-maroon-900/70 uppercase transition-colors duration-300">Secondary School</span>
-            </div>
-          </a>
-        </div>
-
-
-        <!-- Mobile Logo (Center) - Absolutely positioned -->
-        <a href="/" class="md:hidden absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 transition-transform active:scale-95 h-16">
-          <img src="/assets/images/logo5.png" alt="School Logo" class="h-full w-auto object-contain" />
-          <span class="text-xs font-black tracking-tight text-maroon-900 uppercase font-lato">Tshikhuthula</span>
-        </a>
-
-        <!-- Desktop Navigation (25% from Right edge) -->
-        <nav class="hidden md:flex absolute right-[3%] top-0 bottom-0 items-center gap-5">
-          {menuItems.map((item) => (
+        <!-- Left Desktop Navigation -->
+        <nav class="hidden md:flex items-center justify-start gap-6 h-full flex-1 pr-10">
+          {menuItems.filter((item) => item.key !== 'enrol' && item.key !== 'home').map((item) => (
             <div class="relative group h-full flex items-center">
               <a
                 href={item.href}
-                class={`nav-link text-[11px] font-bold uppercase tracking-[0.28em] transition-all flex items-center gap-2 font-lato whitespace-nowrap ${currentPage === item.key ? 'active-link' : 'text-slate-600 hover:text-maroon-900'}`}
+                class={`nav-link text-[14px] font-bold transition-all flex items-center gap-2 font-lato whitespace-nowrap ${currentPage === item.key ? 'active-link' : 'text-white/90 hover:text-white'}`}
               >
                 {item.title}
                 {item.children && (
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-[14px] h-[14px] mt-[1px] text-white/70 group-hover:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                   </svg>
                 )}
               </a>
 
               {item.children && (
-                <div class="absolute top-[calc(100%-8px)] right-0 w-56 bg-gradient-to-b from-emerald-50/95 to-emerald-100/95 backdrop-blur-md border border-emerald-200 shadow-2xl rounded-xl py-[90px] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 submenu-dropdown">
+                <div class="absolute top-full left-0 w-56 bg-white/95 backdrop-blur-md border border-t-0 border-slate-200 shadow-2xl rounded-b-xl py-2 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 submenu-dropdown">
                   {item.children.map((child) => (
-                    <div class="submenu-link-wrapper -mx-6 my-[200px] px-6 py-2">
+                    <div class="submenu-link-wrapper px-4 py-1">
                        <a
                         href={child.href}
-                        class={`block px-0 ${child.title === 'Memories' ? 'py-[211px]' : 'py-[111px]'} text-[12px] font-bold uppercase tracking-wider text-slate-500 hover:text-maroon-800 transition-all font-lato text-center submenu-link`}
+                        class="block px-4 py-2 text-[13px] font-bold text-slate-600 hover:text-amber-700 transition-all font-lato submenu-link"
                       >
                         {child.title}
                       </a>
@@ -126,6 +106,32 @@ const contactInfo = {
             </div>
           ))}
         </nav>
+
+        <!-- Center Logo -->
+        <div id="nav-logo-container" class="hidden md:flex items-center justify-center shrink-0 z-[100] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] h-[80px] w-[80px] bg-white rounded-full p-1 shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-100">
+          <a href="/" class="flex items-center justify-center h-full w-full">
+            <img src="/assets/images/logo5.png" alt="School Logo" class="h-full w-auto object-contain transition-all duration-500" />
+          </a>
+        </div>
+
+        <!-- Mobile Logo (Center) -->
+        <a href="/" class="md:hidden absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-1 transition-transform active:scale-95 h-[90px]">
+          <div class="h-[75px] w-[75px] bg-white rounded-full p-2 shadow-sm flex items-center justify-center">
+            <img src="/assets/images/logo5.png" alt="School Logo" class="h-full w-auto object-contain" />
+          </div>
+        </a>
+
+        <!-- Right Apply Now Button -->
+        <div class="hidden md:flex items-center justify-end h-full flex-1 pl-10">
+          <div class="flex items-center shrink-0">
+            {menuItems.filter((item) => item.key === 'enrol').map((item) => (
+              <a
+                href={item.href}
+                class="nav-enrol-btn text-[14px] font-bold font-lato whitespace-nowrap"
+              >Enrol Now</a>
+            ))}
+          </div>
+        </div>
 
         <!-- Spacer for Mobile Right -->
         <div class="md:hidden w-10 h-10 mr-6"></div>
@@ -138,12 +144,12 @@ const contactInfo = {
     <div id="mobile-nav-overlay" class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     <div
       id="mobile-nav-drawer"
-      class="absolute top-0 left-0 h-full w-[50vw] bg-white/90 backdrop-blur-[28px] shadow-[20px_0_50px_rgba(0,0,0,0.15)] -translate-x-full transition-transform duration-500 ease-out flex flex-col rounded-r-[50px] border-r border-black/[0.06]"
+      class="absolute top-0 left-0 h-full w-[70vw] bg-white/90 backdrop-blur-[28px] shadow-[20px_0_50px_rgba(0,0,0,0.15)] -translate-x-full transition-transform duration-500 ease-out flex flex-col rounded-r-[50px] border-r border-black/[0.06]"
     >
-      <div class="px-4 py-8 flex items-center justify-end relative mb-4">
-        <a href="/" class="absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
-          <div class="bg-white p-2 rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.2)]">
-            <img src="/assets/images/logo5.png" alt="Logo" class="w-12 h-12 object-contain" />
+      <div class="px-4 flex items-center justify-end relative mb-4" style="height: 80px;">
+        <a href="/" class="absolute left-1/2 -translate-x-1/2 flex items-center justify-center" style="width: 60px; height: 60px;">
+          <div class="bg-white rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.2)] flex items-center justify-center" style="width: 60px; height: 60px; padding: 4px;">
+            <img src="/assets/images/logo5.png" alt="Logo" style="width: 52px; height: 52px; object-fit: contain; display: block;" />
           </div>
         </a>
         <button id="mobile-menu-close" class="w-14 h-14 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 hover:rotate-90 transition-all duration-300 shadow-sm border border-black/10">
@@ -213,45 +219,70 @@ const contactInfo = {
 </header>
 
 <style>
+  /* Explicit fallback backgrounds — some mobile webviews don't support
+     the color-mix()-based alpha utilities (bg-white/90, bg-slate-900/80),
+     which left the drawer/overlay fully transparent. */
+  #mobile-nav-overlay {
+    background-color: rgba(15, 23, 42, 0.8);
+  }
+  #mobile-nav-drawer,
+  #mobile-nav [id^="submenu-"] {
+    background-color: rgba(255, 255, 255, 0.97);
+  }
+
+  /* HARD FALLBACK FOR DESKTOP VISIBILITY */
+  @media (min-width: 768px) {
+    #mobile-menu-toggle,
+    .md\:hidden {
+      display: none !important;
+    }
+    nav.hidden.md\:flex,
+    div.hidden.md\:flex {
+      display: flex !important;
+    }
+  }
+
   /* SMOOTH TRANSITIONS */
   #main-header, #main-header nav a, #main-header .logo-name, #main-header .logo-tagline {
     transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
   
-  /* INITIAL STATE (White Frosted) */
+  /* INITIAL STATE (Dark Translucent) */
   #main-header:not(.nav-scrolled) #nav-pill {
-    background-color: rgba(255, 255, 255, 0.85) !important;
+    background-color: transparent !important;
+  }
+  
+  /* SCROLLED STATE (Light Background, Dark Text) */
+  #main-header.nav-scrolled #nav-outer {
+    background: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-bottom-color: transparent !important;
   }
-  
-  /* SCROLLED STATE (Consistent White for Home) */
-  #main-header.nav-scrolled[data-page-type="home"] #nav-pill {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border-radius: 0 !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border: none;
+  #main-header.nav-scrolled #nav-pill {
+    background: transparent !important;
+    box-shadow: none !important;
   }
 
-  /* SUB-PAGE STATE (Frosted White) */
-  #main-header.nav-sub-page #nav-pill {
-    background: rgba(255, 255, 255, 0.82) !important;
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  }
+  #main-header.nav-scrolled .nav-link { color: #334155 !important; }
+  #main-header.nav-scrolled .nav-link:hover { color: #d97706 !important; }
+  #main-header.nav-scrolled .active-link { color: #d97706 !important; }
+  #main-header.nav-scrolled .active-link::after { background: #d97706 !important; }
+  #main-header.nav-scrolled .nav-link svg { color: #64748b !important; }
+  #main-header.nav-scrolled #mobile-menu-toggle svg { color: #334155 !important; }
+  #main-header.nav-scrolled #mobile-menu-toggle { background: rgba(0,0,0,0.05); }
   
-  #main-header.nav-sub-page .logo-name { color: #961107 !important; }
-  #main-header.nav-sub-page .logo-tagline { color: rgba(153, 27, 27, 0.7) !important; }
-  #main-header.nav-sub-page .nav-link { color: #475569 !important; }
-  #main-header.nav-sub-page .nav-link:hover { color: #961107 !important; }
-  #main-header.nav-sub-page .active-link { color: #961107 !important; }
-  #main-header.nav-sub-page .active-link::after { background: #961107 !important; }
-  #main-header.nav-sub-page .nav-link svg { color: #94a3b8; }
-  #main-header.nav-sub-page #mobile-menu-toggle svg { color: #0f172a !important; }
-  #main-header.nav-sub-page #mobile-menu-toggle { background: rgba(0,0,0,0.05); }
+  /* Shrinking Logo on Scroll */
+  #nav-logo-container.logo-scrolled {
+    height: 70px !important;
+    width: 70px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    transform: translateY(0) !important;
+  }
 
   #main-header.nav-sub-page .submenu-dropdown {
     background: #ffffff !important;
@@ -273,11 +304,32 @@ const contactInfo = {
     left: 0;
     width: 0;
     height: 1px;
-    background: #961107;
+    background: #d97706; /* Amber color */
     transition: width 0.3s ease;
   }
   .nav-link:hover::after, .active-link::after { width: 100%; }
-  .active-link { color: #961107 !important; }
+  .active-link { color: #ffffff !important; }
+
+  /* Enrol Now — maroon CTA */
+  .nav-enrol-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 2rem;
+    border-radius: 999px;
+    background: #961107; /* Maroon */
+    color: #fff !important;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  @media (min-width: 768px) {
+    .nav-enrol-btn {
+      display: inline-flex;
+    }
+  }
+  .nav-enrol-btn:hover {
+    background: #7a0e05;
+    transform: translateY(-2px);
+  }
 
   /* SUBMENU ENHANCEMENTS */
   .submenu-dropdown {
@@ -319,15 +371,15 @@ const contactInfo = {
   /* MOBILE TOGGLE */
   #main-header:not(.nav-scrolled) #mobile-menu-toggle {
     background: rgba(255,255,255,0.1);
-    color: white;
+    color: #961107;
   }
-  #main-header:not(.nav-scrolled) #mobile-menu-toggle svg { color: white; }
-  
+  #main-header:not(.nav-scrolled) #mobile-menu-toggle svg { color: #961107; }
+
   #main-header.nav-scrolled #mobile-menu-toggle {
-    background: rgba(0,0,0,0.15);
-    color: white;
+    background: rgba(0,0,0,0.05);
+    color: #961107;
   }
-  #main-header.nav-scrolled #mobile-menu-toggle svg { color: white; }
+  #main-header.nav-scrolled #mobile-menu-toggle svg { color: #961107; }
 
   /* ==============================
      MOBILE NAV FULL-HEIGHT CELLS
@@ -487,10 +539,11 @@ const contactInfo = {
     const navOuter = document.getElementById('nav-outer');
     const navInner = document.getElementById('nav-inner');
     const navPill  = document.getElementById('nav-pill');
+    const navLogo  = document.getElementById('nav-logo-container');
     if (!header || !navOuter || !navInner || !navPill) return;
 
-    // Check if we're on home page (header has top-[5%] class)
-    const isHomePage = header.classList.contains('top-[5%]') || header.style.top === '5%';
+    // Check if we're on home page
+    const isHomePage = header.dataset.pageType === 'home';
 
     const threshold = window.innerHeight * 0.05;
 
@@ -502,15 +555,17 @@ const contactInfo = {
       navInner!.style.maxWidth = '100%';
       navPill!.classList.remove('rounded-xl');
       navPill!.style.borderRadius = '0';
+      if (navLogo) navLogo.classList.add('logo-scrolled');
     }
 
     function setAtTopState() {
-      header!.style.top = '5%';
+      header!.style.top = '0';
       header!.classList.remove('nav-scrolled');
       navOuter!.style.padding = '';
       navInner!.style.maxWidth = '';
       navPill!.classList.add('rounded-xl');
       navPill!.style.borderRadius = '';
+      if (navLogo) navLogo.classList.remove('logo-scrolled');
     }
 
     function onScroll() {

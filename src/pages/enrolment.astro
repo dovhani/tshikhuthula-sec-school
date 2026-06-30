@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SecondaryNav from '../components/SecondaryNav.astro';
+import { WEB3FORMS_ACCESS_KEY } from '../config/forms.ts';
 import '../styles/enrolment.css';
 
 const currentYear = new Date().getFullYear();
@@ -110,7 +111,7 @@ const faqs = [
                         Complete the form below to start your child's enrolment process.
                     </p>
 
-                    <form id="modernEnrolmentForm" style="display:flex; flex-direction:column; gap:2.5rem;">
+                    <form id="modernEnrolmentForm" data-access-key={WEB3FORMS_ACCESS_KEY} style="display:flex; flex-direction:column; gap:2.5rem;">
                         <!-- Student Details -->
                         <div>
                             <div class="form-sub-header">
@@ -119,23 +120,23 @@ const faqs = [
                             </div>
                             <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
                                 <div class="enrolment-field">
-                                    <label>Full Name *</label>
-                                    <input type="text" placeholder="Student's full name" required />
+                                    <label for="student_name">Full Name *</label>
+                                    <input type="text" id="student_name" name="student_name" placeholder="Student's full name" required />
                                 </div>
                                 <div class="enrolment-field">
-                                    <label>Date of Birth *</label>
-                                    <input type="date" required />
+                                    <label for="student_dob">Date of Birth *</label>
+                                    <input type="date" id="student_dob" name="student_dob" required />
                                 </div>
                                 <div class="enrolment-field">
-                                    <label>Grade Applying For *</label>
-                                    <select required>
+                                    <label for="grade">Grade Applying For *</label>
+                                    <select id="grade" name="grade" required>
                                         <option value="">Select Grade</option>
                                         {grades.map(grade => <option value={grade.toLowerCase()}>{grade}</option>)}
                                     </select>
                                 </div>
                                 <div class="enrolment-field">
-                                    <label>Current School</label>
-                                    <input type="text" placeholder="If applicable" />
+                                    <label for="current_school">Current School</label>
+                                    <input type="text" id="current_school" name="current_school" placeholder="If applicable" />
                                 </div>
                             </div>
                         </div>
@@ -148,12 +149,12 @@ const faqs = [
                             </div>
                             <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
                                 <div class="enrolment-field">
-                                    <label>Full Name *</label>
-                                    <input type="text" placeholder="Parent's full name" required />
+                                    <label for="parent_name">Full Name *</label>
+                                    <input type="text" id="parent_name" name="parent_name" placeholder="Parent's full name" autocomplete="name" required />
                                 </div>
                                 <div class="enrolment-field">
-                                    <label>Relationship *</label>
-                                    <select required>
+                                    <label for="relationship">Relationship *</label>
+                                    <select id="relationship" name="relationship" required>
                                         <option value="">Select Relationship</option>
                                         <option value="mother">Mother</option>
                                         <option value="father">Father</option>
@@ -161,18 +162,22 @@ const faqs = [
                                     </select>
                                 </div>
                                 <div class="enrolment-field">
-                                    <label>Email Address *</label>
-                                    <input type="email" placeholder="your@email.com" required />
+                                    <label for="parent_email">Email Address *</label>
+                                    <input type="email" id="parent_email" name="parent_email" placeholder="your@email.com" autocomplete="email" required />
                                 </div>
                                 <div class="enrolment-field">
-                                    <label>Phone Number *</label>
-                                    <input type="tel" placeholder="+27 00 000 0000" required />
+                                    <label for="parent_phone">Phone Number *</label>
+                                    <input type="tel" id="parent_phone" name="parent_phone" placeholder="+27 00 000 0000" autocomplete="tel" required />
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Honeypot — hidden from users; bots that fill it are silently dropped. -->
+                        <input type="text" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
+
                         <div>
                             <button type="submit" class="enrolment-submit">Submit Application</button>
+                            <p id="enrolmentFormStatus" role="status" aria-live="polite" style="margin:0.75rem 0 0;"></p>
                             <p class="form-privacy-note">Secured Submission &bull; Privacy Protected</p>
                         </div>
                     </form>
@@ -237,13 +242,64 @@ const faqs = [
             });
         });
 
-        // ── Form ──
-        const form = document.getElementById('modernEnrolmentForm') as HTMLFormElement;
-        form?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Thank you for your application! We will contact you within 2 working days.');
-            form.reset();
-        });
+        // ── Form → Web3Forms (no backend, pure static) ──
+        const form = document.getElementById('modernEnrolmentForm') as HTMLFormElement | null;
+        const status = document.getElementById('enrolmentFormStatus') as HTMLElement | null;
+        if (form && form.dataset.wired !== '1') {
+            form.dataset.wired = '1';
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (status) { status.textContent = ''; status.style.color = ''; }
+
+                const data = new FormData(form);
+                // Honeypot — if a bot filled this, silently pretend success.
+                if (String(data.get('botcheck') ?? '').trim()) { form.reset(); return; }
+
+                const required = ['student_name', 'student_dob', 'grade', 'parent_name', 'relationship', 'parent_email', 'parent_phone'];
+                for (const field of required) {
+                    if (!String(data.get(field) ?? '').trim()) {
+                        if (status) { status.style.color = '#b91c1c'; status.textContent = 'Please complete all required fields.'; }
+                        return;
+                    }
+                }
+
+                const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+                const originalText = submitBtn?.textContent ?? '';
+                if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting…'; }
+
+                try {
+                    const resp = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                        body: JSON.stringify({
+                            access_key: form.dataset.accessKey ?? '',
+                            from_name: String(data.get('parent_name') ?? ''),
+                            subject: `[Tshikhuthula · Enrolment] ${String(data.get('student_name') ?? '')} — ${String(data.get('grade') ?? '')}`,
+                            student_name: String(data.get('student_name') ?? ''),
+                            date_of_birth: String(data.get('student_dob') ?? ''),
+                            grade: String(data.get('grade') ?? ''),
+                            current_school: String(data.get('current_school') ?? ''),
+                            parent_name: String(data.get('parent_name') ?? ''),
+                            relationship: String(data.get('relationship') ?? ''),
+                            email: String(data.get('parent_email') ?? ''),
+                            phone: String(data.get('parent_phone') ?? ''),
+                        }),
+                    });
+                    const result = await resp.json().catch(() => ({})) as { success?: boolean };
+                    if (resp.ok && result.success) {
+                        form.reset();
+                        if (status) { status.style.color = '#15803d'; status.textContent = 'Thank you for your application! We will contact you within 2 working days.'; }
+                    } else if (status) {
+                        status.style.color = '#b91c1c';
+                        status.textContent = 'Sorry, we couldn’t submit your application. Please email us directly at info@tshikuthula.co.za.';
+                    }
+                } catch {
+                    if (status) { status.style.color = '#b91c1c'; status.textContent = 'Network error. Please try again, or email info@tshikuthula.co.za.'; }
+                } finally {
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalText; }
+                }
+            });
+        }
     }
 
     initEnrolment();
